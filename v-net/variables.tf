@@ -110,11 +110,6 @@ variable "key_vault_resource_group" {
   default     = null
 }
 
-variable "hub_subscription_id" {
-  description = "Subscription ID for the hub environment"
-  type        = string
-  default     = null
-}
 
 variable "subscription_id" {
   description = "The subscription ID to use for the Azure provider"

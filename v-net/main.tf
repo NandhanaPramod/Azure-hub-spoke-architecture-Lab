@@ -122,10 +122,6 @@ data "azurerm_client_config" "this" {
   # This data source provides information about the current Azure client configuration
 }
 
-data "azurerm_client_config" "hub" {
-  provider = azurerm.hub
-}
-
 data "azurerm_monitor_diagnostic_categories" "vnet" {
   resource_id = azurerm_virtual_network.vnet.id
 }
@@ -143,4 +139,29 @@ data "azurerm_key_vault" "kv" {
   count               = var.key_vault_name != null ? 1 : 0
   name                = var.key_vault_name
   resource_group_name = var.key_vault_resource_group
+}
+
+# Route Table
+resource "azurerm_route_table" "this" {
+  name                = "${var.basename}-${var.environment}-rt"
+  resource_group_name = local.resource_group_name
+  location            = local.location
+
+  dynamic "route" {
+    for_each = var.routes
+    content {
+      name                   = "${route.value.name_prefix}-${join("-", route.value.name_postfix)}"
+      address_prefix         = route.value.address_prefix
+      next_hop_type          = route.value.next_hop_type
+      next_hop_in_ip_address = route.value.next_hop_in_ip_address
+    }
+  }
+}
+
+# Route Table Association with Subnets
+resource "azurerm_subnet_route_table_association" "this" {
+  for_each = local.subnet_map
+
+  subnet_id      = azurerm_subnet.subnet[each.key].id
+  route_table_id = azurerm_route_table.this.id
 }

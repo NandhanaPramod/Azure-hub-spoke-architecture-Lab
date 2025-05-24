@@ -1,9 +1,7 @@
-# Subscription IDs
-subscription_id     = "your-subscription-id"
-hub_subscription_id = "your-hub-subscription-id"
+# Azure region where resources will be created
+location = "ukwest"
 
-# Other variables
-location    = "ukwest"
+# Environment name (e.g., dev, prod, non-prod)
 environment = "non-prod"
 basename    = "spoke"
 
@@ -41,27 +39,75 @@ security_rules = [
     destination_port_range     = "*"
     source_address_prefix      = "VirtualNetwork"
     destination_address_prefix = "VirtualNetwork"
+  },
+  {
+    name                       = "AllowAzureLoadBalancerInBound"
+    priority                   = 110
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "AzureLoadBalancer"
+    destination_address_prefix = "*"
+  },
+  {
+    name                       = "DenyAllInBound"
+    priority                   = 4096
+    direction                  = "Inbound"
+    access                     = "Deny"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
   }
 ]
 
-# Security groups
+# Network security groups
 security_group = [
   {
     name = "app-nsg"
-    rule = ["AllowVnetInBound"]
+    rule = ["AllowVnetInBound", "AllowAzureLoadBalancerInBound", "DenyAllInBound"]
   },
   {
     name = "data-nsg"
-    rule = ["AllowVnetInBound"]
+    rule = ["AllowVnetInBound", "AllowAzureLoadBalancerInBound", "DenyAllInBound"]
   },
   {
     name = "web-nsg"
-    rule = ["AllowVnetInBound"]
+    rule = ["AllowVnetInBound", "AllowAzureLoadBalancerInBound", "DenyAllInBound"]
+  }
+]
+
+# Routes
+routes = [
+  {
+    name_prefix            = "internet"
+    name_postfix           = ["route"]
+    address_prefix         = "0.0.0.0/0"
+    next_hop_type          = "VirtualNetworkGateway"
+    next_hop_in_ip_address = null
   }
 ]
 
 # DDoS protection
 ddos_name = "ddos-protection"
+ddos_resource_group = "ddos-hub"
 
 # Resource group creation
-create_resource_group = true 
+create_resource_group = true
+
+# Default tags
+default_tags = {
+  Environment = "non-prod"
+  Project     = "spoke-architecture"
+  ManagedBy   = "terraform"
+}
+
+# Optional: Key Vault configuration
+# key_vault_name = "your-key-vault-name"
+# key_vault_resource_group = "your-key-vault-rg"
+
+# Optional: Subscription ID
+# subscription_id = "your-subscription-id" 
