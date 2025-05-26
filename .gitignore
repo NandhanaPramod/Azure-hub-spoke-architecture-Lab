@@ -13,29 +13,40 @@ crash.*.log
 *.tfvars
 !terraform.tfvars.example
 
-# Ignore override files as they are usually used for local dev
+# Override files
 override.tf
 override.tf.json
 *_override.tf
 *_override.tf.json
 
-# Ignore CLI configuration files
+# CLI configuration files
 .terraformrc
 terraform.rc
 
 # Ignore lock files
 .terraform.lock.hcl
 
-# Ignore Mac/OSX files
+# Ignore system files
 .DS_Store
-
-# Ignore Windows files
 Thumbs.db
-ehthumbs.db
-Desktop.ini
 
 # Ignore IDE files
 .idea/
 .vscode/
-*.swp
-*.swo 
+
+# Ignore sensitive files
+**/versions.tf
+**/provider.tf
+**/backend.tf
+**/terraform.tfvars
+**/prod.tf
+**/non-prod.tf
+**/dev.tf
+**/staging.tf
+**/uat.tf
+**/qa.tf
+
+# Ignore any files containing sensitive data
+**/secrets.tf
+**/credentials.tf
+**/auth.tf 
