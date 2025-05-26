@@ -1,0 +1,3 @@
+vnet_name = "oss_dev_vnet"
+basename  = "oss"
+private_zones = { "privatelink.blob.core.windows.net" : "oss_hub", "privatelink.azconfig.io" : "oss_hub", "privatelink.vaultcore.azure.net" : "oss_hub", "privatelink.azurecr.io" : "oss_hub", "privatelink.servicebus.windows.net" : "oss_hub", "privatelink.redis.cache.windows.net" : "oss_hub", "privatelink.web.core.windows.net": "oss_hub", "azure-api.net": "oss_hub" }

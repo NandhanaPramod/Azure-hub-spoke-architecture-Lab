@@ -1,0 +1,2 @@
+basename    = "oss"
+environment = "hub"

@@ -1,0 +1,29 @@
+mic:
+  affinity:
+    podAntiAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 1
+        podAffinityTerm:
+          topologyKey: kubernetes.io/hostname
+          labelSelector:
+            matchLabels:
+              component: mic
+  leaderElection:
+    # Override the namespace to create leader election objects (default is default namespace)
+    namespace: "kube-system"
+nmi:
+  # Override mic namespace to short circuit MIC token requests (default is default namespace)
+  micNamespace: "kube-system"
+rbac:
+  allowAccessToSecrets: false
+  pspEnabled: true
+azureIdentities:
+  azure-identity:
+    namespace: "kube-system"
+    name: ""
+    type: 0
+    resourceID: ${resourceID}
+    clientID: ${clientID}
+    binding:
+      name: "azure-identity-binding"
+      selector: "aks-pod-identity"

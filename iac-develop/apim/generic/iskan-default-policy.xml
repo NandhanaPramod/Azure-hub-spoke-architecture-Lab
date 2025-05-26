@@ -1,0 +1,86 @@
+<policies>
+    <inbound>
+        <base />
+        <set-variable name="gzipresponse" value="@(context.Request.Headers.GetValueOrDefault("Accept-Encoding","null").Contains("gzip"))" />
+        <rate-limit-by-key calls="${ratelimit}"
+            renewal-period="${ratelimitrenewal}"
+            counter-key="@(context.Request.Headers.GetValueOrDefault("X-Forwarded-For", "default-call-rate-limit"))" />
+        <choose>
+            <when condition="@(context.Request.Url.Path.ToLower() == "/graphql" || context.Request.Url.Path.ToLower() == "/api/cba/graphql")">
+                <choose>
+                    <when condition="@(context.Request.Method.ToLower() == "post")">
+                        <set-variable name="reqBody" value="@((bool)context.Request.Body.As<JObject>(preserveContent: true).ToString().ToLower().Contains("introspectionquery"))" />
+                        <set-variable name="reqIp" value="@((string)context.Request.Headers.GetValueOrDefault("X-Forwarded-For", "").Trim().Split(',')[0])" />
+                        <set-variable name="ipList" value="${allowedIPs}" />
+                        <set-variable name="ipAllow" value="@{
+							var ipList = context.Variables["ipList"] as string;
+								var ipArray = ipList.Split(',');
+								var reqIp = (string)context.Variables["reqIp"];
+
+								for (int i = 0; i < ipArray.Length; i++)
+								{
+									if (reqIp.StartsWith(ipArray[i]))
+									{
+										return true;
+									}
+								}
+							return false;
+						}" />
+                        <set-variable name="isallow" value="@((bool)context.Variables["reqBody"] && !context.Variables.GetValueOrDefault("ipAllow", false))" />
+                        <choose>
+                            <when condition="@(context.Variables.GetValueOrDefault<bool>("isallow"))">
+                                <return-response>
+                                    <set-status code="403" reason="Forbidden" />
+                                </return-response>
+                            </when>
+                        </choose>
+                    </when>
+                </choose>
+                <choose>
+                    <when condition="@(context.Request.Method.ToLower() == "get")">
+                        <set-variable name="reqIp" value="@((string)context.Request.Headers.GetValueOrDefault("X-Forwarded-For", "").Trim().Split(',')[0])" />
+                        <set-variable name="ipList" value="${allowedIPs}" />
+                        <set-variable name="ipAllow" value="@{
+							var ipList = context.Variables["ipList"] as string;
+								var ipArray = ipList.Split(',');
+								var reqIp = (string)context.Variables["reqIp"];
+
+								for (int i = 0; i < ipArray.Length; i++)
+								{
+									if (reqIp.Contains(ipArray[i]))
+									{
+										return true;
+									}
+								}
+							return false;
+						}" />
+                        <set-variable name="isallow" value="@(!context.Variables.GetValueOrDefault("ipAllow", false))" />
+                        <choose>
+                            <when condition="@(context.Variables.GetValueOrDefault<bool>("isallow"))">
+                                <return-response>
+                                    <set-status code="403" reason="Forbidden" />
+                                </return-response>
+                            </when>
+                        </choose>
+                    </when>
+                </choose>
+            </when>
+        </choose>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+        <choose>
+            <when condition="@(context.Variables.GetValueOrDefault<bool>("gzipresponse"))">
+              <set-header name="Content-Encoding" exists-action="override">
+                <value>gzip</value>
+              </set-header>
+            </when>
+          </choose>
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

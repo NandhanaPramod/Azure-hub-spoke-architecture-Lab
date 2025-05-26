@@ -1,0 +1,61 @@
+<policies>
+    <inbound>
+        <base />
+		<set-variable name="gzipresponse" value="@(context.Request.Headers.GetValueOrDefault("Accept-Encoding","null").Contains("gzip"))" />
+        <rate-limit-by-key  calls="${ratelimit}"
+          renewal-period="${ratelimitrenewal}"
+		  counter-key="@(context.Request.Headers.GetValueOrDefault("X-Forwarded-For", "default-call-rate-limit"))" />
+        <choose>
+            <when condition="@(context.Request.Method.ToLower() != "get")">
+                <set-variable name="receivedSubscriptionKey" value="@((string)context.Request.Headers.GetValueOrDefault("x-cba-api-key", ""))" />
+                <set-variable name="primarySubscriptionKey" value="@{
+                                    try
+                                    {
+                                        return context.Subscription.PrimaryKey;
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        return "no-api-key";
+                                    }
+                                }" />
+                <set-variable name="secondarySubscriptionKey" value="@{
+                                    try
+                                    {
+                                        return context.Subscription.SecondaryKey;
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        return "no-api-key";
+                                    }
+                                }" />
+                <choose>
+                    <when condition="@(context.Variables.GetValueOrDefault<string>("receivedSubscriptionKey") != context.Variables.GetValueOrDefault<string>("primarySubscriptionKey") && context.Variables.GetValueOrDefault<string>("receivedSubscriptionKey") != context.Variables.GetValueOrDefault<string>("secondarySubscriptionKey"))">
+                        <return-response>
+                            <set-status code="401" reason="Access Denied" />
+                            <set-header name="Content-Type" exists-action="override">
+                                <value>application/json</value>
+                            </set-header>
+                            <set-body>{ "statusCode": 401, "message": "Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription." }</set-body>
+                        </return-response>
+                    </when>
+                </choose>
+            </when>
+        </choose>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+        <choose>
+            <when condition="@(context.Variables.GetValueOrDefault<bool>("gzipresponse"))">
+              <set-header name="Content-Encoding" exists-action="override">
+                <value>gzip</value>
+              </set-header>
+            </when>
+          </choose>
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

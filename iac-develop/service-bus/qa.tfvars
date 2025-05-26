@@ -1,0 +1,140 @@
+environment             = "qa"
+resource_group_name     = "oss_qa"
+servicebus_whitelist_ip = ["49.206.131.39"]
+client_name             = "adha"
+stack                   = "servicebus"
+subscription_id         = "d2f6e3f6-dc34-45ae-b39f-9e61ee4f2a97"
+backwards_compatible    = true
+action_group            = "oss-qa-infra-alerts"
+
+servicebus_namespaces_queues_data = {
+  servicebus1 = {
+    custom_name    = "iskan-qa-servicebus"
+    sku            = "Premium"
+    capacity       = 1
+    zone_redundant = true
+
+    queues = {
+      elms-queue = {
+        max_delivery_count                      = 10
+        requires_duplicate_detection            = false
+        duplicate_detection_history_time_window = "PT10M"
+        requires_session                        = false
+        max_size_in_megabytes                   = 1024
+        default_message_ttl                     = "P14D"
+        dead_lettering_on_message_expiration    = false
+        auto_delete_on_idle                     = "P10675199DT2H48M5.4775807S"
+        enable_partitioning                     = false
+        enable_express                          = false
+        lock_duration                           = "PT30S"
+        enable_batched_operations               = true
+        enable_express                          = false
+      }
+      email-queue = {
+        max_delivery_count                      = 10
+        requires_duplicate_detection            = false
+        duplicate_detection_history_time_window = "PT10M"
+        requires_session                        = false
+        max_size_in_megabytes                   = 1024
+        default_message_ttl                     = "P14D"
+        dead_lettering_on_message_expiration    = false
+        auto_delete_on_idle                     = "P10675199DT2H48M5.4775807S"
+        enable_partitioning                     = false
+        enable_express                          = false
+        lock_duration                           = "PT30S"
+        enable_batched_operations               = true
+        enable_express                          = false
+      }
+      notification-queue = {
+        max_delivery_count                      = 10
+        requires_duplicate_detection            = false
+        duplicate_detection_history_time_window = "PT10M"
+        requires_session                        = false
+        max_size_in_megabytes                   = 1024
+        default_message_ttl                     = "P14D"
+        dead_lettering_on_message_expiration    = false
+        auto_delete_on_idle                     = "P10675199DT2H48M5.4775807S"
+        enable_partitioning                     = false
+        enable_express                          = false
+        lock_duration                           = "PT30S"
+        enable_batched_operations               = true
+        enable_express                          = false
+      }
+      sms-queue = {
+        max_delivery_count                      = 10
+        requires_duplicate_detection            = false
+        duplicate_detection_history_time_window = "PT10M"
+        requires_session                        = false
+        max_size_in_megabytes                   = 1024
+        default_message_ttl                     = "P14D"
+        dead_lettering_on_message_expiration    = false
+        auto_delete_on_idle                     = "P10675199DT2H48M5.4775807S"
+        enable_partitioning                     = false
+        enable_express                          = false
+        lock_duration                           = "PT30S"
+        enable_batched_operations               = true
+        enable_express                          = false
+      }
+      undertaking-queue = {
+        max_delivery_count                      = 10
+        requires_duplicate_detection            = false
+        duplicate_detection_history_time_window = "PT10M"
+        requires_session                        = false
+        max_size_in_megabytes                   = 1024
+        default_message_ttl                     = "P14D"
+        dead_lettering_on_message_expiration    = false
+        auto_delete_on_idle                     = "P10675199DT2H48M5.4775807S"
+        enable_partitioning                     = false
+        enable_express                          = false
+        lock_duration                           = "PT30S"
+        enable_batched_operations               = true
+        enable_express                          = false
+      }
+      ext-queue = {
+        max_delivery_count                      = 10
+        requires_duplicate_detection            = false
+        duplicate_detection_history_time_window = "PT10M"
+        requires_session                        = false
+        max_size_in_megabytes                   = 1024
+        default_message_ttl                     = "P14D"
+        dead_lettering_on_message_expiration    = false
+        auto_delete_on_idle                     = "P10675199DT2H48M5.4775807S"
+        enable_partitioning                     = false
+        enable_express                          = false
+        lock_duration                           = "PT30S"
+        enable_batched_operations               = true
+        enable_express                          = false
+      }
+      gis-queue = {
+        max_delivery_count                      = 10
+        requires_duplicate_detection            = false
+        duplicate_detection_history_time_window = "PT10M"
+        requires_session                        = false
+        max_size_in_megabytes                   = 1024
+        default_message_ttl                     = "P14D"
+        dead_lettering_on_message_expiration    = false
+        auto_delete_on_idle                     = "P10675199DT2H48M5.4775807S"
+        enable_partitioning                     = false
+        enable_express                          = false
+        lock_duration                           = "PT30S"
+        enable_batched_operations               = true
+        enable_express                          = false
+      }
+      migration-queue = {
+        max_delivery_count                      = 10
+        requires_duplicate_detection            = false
+        duplicate_detection_history_time_window = "PT10M"
+        requires_session                        = false
+        max_size_in_megabytes                   = 1024
+        default_message_ttl                     = "P14D"
+        dead_lettering_on_message_expiration    = false
+        auto_delete_on_idle                     = "P10675199DT2H48M5.4775807S"
+        enable_partitioning                     = false
+        enable_express                          = false
+        lock_duration                           = "PT30S"
+        enable_batched_operations               = true
+        enable_express                          = false
+      }
+    }
+  }
+}

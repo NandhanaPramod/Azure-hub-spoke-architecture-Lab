@@ -1,0 +1,2 @@
+basename      = "oss"
+private_zones = ["privatelink.blob.core.windows.net", "privatelink.azconfig.io", "privatelink.vaultcore.azure.net", "privatelink.azurecr.io", "privatelink.servicebus.windows.net", "privatelink.redis.cache.windows.net", "privatelink.file.core.windows.net", "privatelink.web.core.windows.net", "azure-api.net"]

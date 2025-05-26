@@ -1,0 +1,17 @@
+<policies>
+    <inbound>
+        <base />
+        <rate-limit-by-key calls="${ratelimit}"
+            renewal-period="${ratelimitrenewal}"
+            counter-key="@(context.Request.Headers.GetValueOrDefault("X-Forwarded-For", "default-call-rate-limit"))" />
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

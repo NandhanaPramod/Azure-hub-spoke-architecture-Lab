@@ -1,0 +1,9 @@
+sku                            = "Premium"
+registry_name                  = "osshubcontainerregistry"
+virtual_network_name           = "oss_hub_vnet"
+subnet_name                    = "devops"
+virtual_network_resource_group = "oss_hub"
+private_dns_zone               = "privatelink.azurecr.io"
+private_dns_zone_rg            = "oss_hub"
+allowed_ips                    = ["80.227.101.131/32"]
+replication_location           = "UAE Central"

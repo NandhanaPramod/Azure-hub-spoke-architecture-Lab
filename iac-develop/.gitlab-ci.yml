@@ -1,0 +1,4 @@
+
+include:
+  - project: 'ps-oss/devops/pipeline-templates'
+    file: 'pipeline/iac.yml'

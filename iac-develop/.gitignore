@@ -1,0 +1,9 @@
+.terraform
+.vscode
+.idea
+*.tfstate
+*.tfstate.backup
+*.out
+.terraform.lock.hcl
+planfile
+local.settings.json
