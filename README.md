@@ -60,7 +60,7 @@ NAT Gateway (nat-gateway)
 Application Gateway (app-gw)
 
 Monitoring and Management:
-##########################
+==========================
 Azure Monitor (monitor)
 Alerts (alert)
 Dashboard (dashboard)
