@@ -43,6 +43,8 @@ terraform apply
 
 -----------------------------------------------------
 Based on the architecture and best practices for Azure hub-spoke deployments, here's the recommended order of service creation after your network setup:
+
+
 Security Foundation (First Priority):
 ===================================
 Key Vault (keyvault) - This is crucial as other services will need to store secrets
