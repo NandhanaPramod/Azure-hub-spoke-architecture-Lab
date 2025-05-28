@@ -46,7 +46,8 @@ Based on the architecture and best practices for Azure hub-spoke deployments, he
 Security Foundation (First Priority):
 ===================================
 Key Vault (keyvault) - This is crucial as other services will need to store secrets
-DDoS Protection Plan (ddos-protection-plan)
+
+DDoS Protection Plan - (ddos-protection-plan)
 Firewall (firewall) - For centralized network security
 Bastion Host (bastion) - For secure management access
 
